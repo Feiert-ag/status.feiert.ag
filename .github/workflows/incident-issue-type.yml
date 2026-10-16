@@ -1,0 +1,61 @@
+# Gives the issues that Upptime opens for an outage the GitHub issue type "Incident".
+# Upptime itself only sets labels (status and the slug of the site), and the status page keeps
+# using them. The type lets outages be filtered across the organisation Feiert-ag, apart from bugs.
+# Upptime's template update replaces only its own workflow files, so this file stays.
+name: Incident issue type
+
+on:
+  issues:
+    types: [opened, labeled]
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "How many existing issues with the label status and no type this run updates"
+        default: "300"
+
+permissions:
+  issues: write
+  # GitHub sets an issue type only for tokens with push access and silently drops it otherwise
+  contents: write
+
+jobs:
+  set-type:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.action == 'opened' && contains(github.event.issue.labels.*.name, 'status')) ||
+      (github.event.action == 'labeled' && github.event.label.name == 'status')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set the issue type
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+          LIMIT: ${{ inputs.limit || '300' }}
+          TYPE: Incident
+        run: |
+          if [ -n "$NUMBER" ]; then
+            numbers="$NUMBER"
+          else
+            # Backfill: open and closed issues with the label status and no type yet, newest first
+            : > numbers.txt
+            page=1
+            while :; do
+              gh api "repos/$REPO/issues?labels=status&state=all&per_page=100&page=$page" > page.json
+              jq -r '.[] | select(.pull_request == null and .type == null) | .number' page.json >> numbers.txt
+              [ "$(jq length page.json)" -lt 100 ] && break
+              page=$((page + 1))
+            done
+            echo "$(wc -l < numbers.txt) issues without a type, this run updates up to $LIMIT of them"
+            numbers=$(head -n "$LIMIT" numbers.txt)
+          fi
+          for n in $numbers; do
+            type=$(gh api -X PATCH "repos/$REPO/issues/$n" -f type="$TYPE" --jq '.type.name // ""')
+            if [ "$type" != "$TYPE" ]; then
+              echo "::error::Issue #$n did not get the type $TYPE. Does the type exist in the organisation?"
+              exit 1
+            fi
+            echo "#$n: $TYPE"
+            # The backfill stays well below GitHub's secondary rate limit for write requests
+            if [ -z "$NUMBER" ]; then sleep 2; fi
+          done
