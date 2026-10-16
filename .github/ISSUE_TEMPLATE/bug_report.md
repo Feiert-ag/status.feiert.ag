@@ -1,40 +1,31 @@
 ---
-name: Bug report
-about: Create a report to help us improve
+name: Problem report
+about: Report a problem with Feiert.ag or this status page
 title: ''
-labels: 'bug'
-assignees: 'AnandChowdhary'
+labels: ''
+type: Bug
+assignees: 'ADoebeling'
 
 ---
 
-<!-- If you have a question, you should use Discussions instead: https://github.com/orgs/upptime/discussions -->
+<!-- Please do not post personal data such as guest lists, e-mail addresses or private links here. This repository is public. -->
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**What happened?**
+A clear and short description of the problem.
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+**Where?**
+The address, e.g. https://feiert.ag or https://status.feiert.ag
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+**When?**
+Date and time, ideally with the time zone, e.g. 2026-10-10 22:15 CEST
+
+**What did you expect?**
+A short description of what should have happened.
 
 **Screenshots**
-If applicable, add screenshots to help explain your problem.
+If helpful, add screenshots.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
-
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
-
-**Additional context**
-Add any other context about the problem here.
+**Device and browser**
+ - Device: [e.g. iPhone 15, laptop]
+ - Operating system: [e.g. iOS 26, Windows 11]
+ - Browser and version: [e.g. Firefox, Safari or Chrome, with the version from its "About" page]
