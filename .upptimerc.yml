@@ -7,6 +7,10 @@ sites:
   # Until our own monitoring exists, only the landing page is checked (DOEBELING/Feiert.ag#496)
   - name: 'Feiert.ag'
     url: https://Feiert.ag
+    # Checked via Globalping from a Deutsche Telekom connection in Germany (AS3320), never from a
+    # Hetzner data centre. Needs the repository secret GLOBALPING_TOKEN for the higher rate limit.
+    type: globalping
+    location: "Germany+AS3320"
     __dangerous__body_down_if_text_missing: 'Hier startet Deine Feier'
     icon: https://status.feiert.ag/logo/bildzeichen-glut.svg
     maxResponseTime: 1000
